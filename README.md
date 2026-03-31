@@ -1,12 +1,12 @@
-# Mini Claude Code
+# cc-mini
 
-A minimal Python replica of [Claude Code](https://claude.ai/code) — a terminal-based AI coding assistant powered by the Anthropic API.
+A lightweight Python implementation of [Claude Code](https://claude.ai/code) for the community — a terminal-based AI coding assistant that runs an agentic tool loop via the Anthropic API.
 
 ## Features
 
 - **Interactive REPL** with command history
-- **Streaming responses** — text appears as it's generated
-- **Tool use loop** — Claude can call tools multiple times per turn
+- **Streaming responses** — text appears as it is generated
+- **Agentic tool loop** — multiple tool calls per turn
 - **5 built-in tools**: file read, file edit, glob, grep, bash
 - **Permission system** — reads auto-approved, writes/bash ask for confirmation
 
@@ -30,7 +30,7 @@ pip install -e ".[dev]"
 export ANTHROPIC_API_KEY=sk-ant-...
 ```
 
-You can also set a custom API base URL, which is useful when targeting a proxy or an Anthropic-compatible endpoint:
+Custom API base URL (useful for proxies or compatible endpoints):
 
 ```bash
 export ANTHROPIC_BASE_URL=https://your-gateway.example.com
@@ -39,25 +39,25 @@ export ANTHROPIC_BASE_URL=https://your-gateway.example.com
 Optional environment variables for runtime defaults:
 
 ```bash
-export MINI_CLAUDE_MODEL=claude-sonnet-4-5
-export MINI_CLAUDE_MAX_TOKENS=64000
+export CC_MINI_MODEL=claude-sonnet-4-5
+export CC_MINI_MAX_TOKENS=64000
 ```
 
 ### Interactive REPL
 
 ```bash
-python3 -m mini_claude.main
+cc-mini
 ```
 
 ```
-Mini Claude Code  type 'exit' or Ctrl+C to quit
+cc-mini  type 'exit' or Ctrl+C to quit
 
 > list all python files in this project
 ↳ Glob(**/*.py) ✓
 Here are all the .py files...
 
 > read engine.py and explain how the tool loop works
-↳ Read(mini_claude/engine.py) ✓
+↳ Read(src/core/engine.py) ✓
 The submit() method implements an agentic loop...
 ```
 
@@ -65,24 +65,22 @@ Type `exit` or press `Ctrl+C` to quit.
 
 ### One-shot prompt
 
-Pass a prompt directly as an argument:
-
 ```bash
-python3 -m mini_claude.main "what tests exist in this project?"
+cc-mini "what tests exist in this project?"
 ```
 
 ### Non-interactive / scripted mode
 
-Use `-p` to print the response and exit (no REPL):
+Use `-p` to print the response and exit:
 
 ```bash
-python3 -m mini_claude.main -p "summarize this codebase in 3 bullets"
+cc-mini -p "summarize this codebase in 3 bullets"
 ```
 
 Pipe input:
 
 ```bash
-echo "what does engine.py do?" | python3 -m mini_claude.main -p
+echo "what does engine.py do?" | cc-mini -p
 ```
 
 ### Auto-approve permissions
@@ -90,32 +88,32 @@ echo "what does engine.py do?" | python3 -m mini_claude.main -p
 Skip permission prompts for all tools (use with care):
 
 ```bash
-python3 -m mini_claude.main --auto-approve
+cc-mini --auto-approve
 ```
 
 ### Configure API endpoint and model from CLI
 
 ```bash
-python3 -m mini_claude.main \
+cc-mini \
   --base-url https://your-gateway.example.com \
   --api-key sk-ant-... \
   --model claude-sonnet-4
 ```
 
-`max_tokens` now follows the selected model by default. Override it only when you need a tighter cap:
+`max_tokens` follows the selected model by default. Override when you need a tighter cap:
 
 ```bash
-python3 -m mini_claude.main --model claude-3-5-haiku --max-tokens 2048
+cc-mini --model claude-3-5-haiku --max-tokens 2048
 ```
 
 ### Configure with a TOML file
 
-Mini Claude looks for config files in these locations, in order:
+Config files are loaded in this order:
 
-1. `~/.config/mini-claude/config.toml`
-2. `.mini-claude.toml` in the current working directory
+1. `~/.config/cc-mini/config.toml`
+2. `.cc-mini.toml` in the current working directory
 
-The project-local file overrides the home config. You can also point to a specific file with `--config`.
+The project-local file overrides the home config. Point to a specific file with `--config`.
 
 Example:
 
@@ -147,7 +145,7 @@ max_tokens = 64000
 
 ### Permission prompt
 
-When Claude wants to run a write or bash tool, you'll see:
+When the assistant wants to run a write or bash tool, you'll see:
 
 ```
 Permission required: Bash
@@ -157,16 +155,16 @@ Permission required: Bash
 ```
 
 - `y` — allow once
-- `n` — deny (Claude sees "Permission denied")
+- `n` — deny
 - `a` — always allow this tool for the rest of the session
 
 ## Project structure
 
 ```
-mini_claude/
+src/core/
 ├── main.py         # CLI entry point + REPL
 ├── engine.py       # Streaming API loop + tool execution
-├── context.py      # System prompt (git status, date, CLAUDE.md)
+├── context.py      # System prompt builder (git status, date)
 ├── permissions.py  # Permission checker
 └── tools/
     ├── base.py     # Tool ABC + ToolResult

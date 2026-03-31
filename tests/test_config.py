@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from mini_claude.config import (
+from core.config import (
     DEFAULT_MODEL,
     default_max_tokens_for_model,
     load_app_config,
@@ -39,10 +39,10 @@ def test_default_max_tokens_follow_model_family():
 def test_load_app_config_reads_anthropic_section(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     monkeypatch.delenv("ANTHROPIC_BASE_URL", raising=False)
-    monkeypatch.delenv("MINI_CLAUDE_MODEL", raising=False)
-    monkeypatch.delenv("MINI_CLAUDE_MAX_TOKENS", raising=False)
+    monkeypatch.delenv("CC_MINI_MODEL", raising=False)
+    monkeypatch.delenv("CC_MINI_MAX_TOKENS", raising=False)
 
-    config_path = tmp_path / "mini-claude.toml"
+    config_path = tmp_path / "cc-mini.toml"
     config_path.write_text(
         '[anthropic]\n'
         'api_key = "config-key"\n'
@@ -60,7 +60,7 @@ def test_load_app_config_reads_anthropic_section(tmp_path: Path, monkeypatch: py
 
 
 def test_load_app_config_cli_overrides_env_and_file(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
-    config_path = tmp_path / "mini-claude.toml"
+    config_path = tmp_path / "cc-mini.toml"
     config_path.write_text(
         'api_key = "file-key"\n'
         'base_url = "https://file.test"\n'
@@ -70,8 +70,8 @@ def test_load_app_config_cli_overrides_env_and_file(tmp_path: Path, monkeypatch:
     )
     monkeypatch.setenv("ANTHROPIC_API_KEY", "env-key")
     monkeypatch.setenv("ANTHROPIC_BASE_URL", "https://env.test")
-    monkeypatch.setenv("MINI_CLAUDE_MODEL", "claude-opus-4")
-    monkeypatch.setenv("MINI_CLAUDE_MAX_TOKENS", "1234")
+    monkeypatch.setenv("CC_MINI_MODEL", "claude-opus-4")
+    monkeypatch.setenv("CC_MINI_MAX_TOKENS", "1234")
 
     config = load_app_config(
         _args(
@@ -92,8 +92,8 @@ def test_load_app_config_cli_overrides_env_and_file(tmp_path: Path, monkeypatch:
 def test_load_app_config_uses_defaults_when_nothing_is_set(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     monkeypatch.delenv("ANTHROPIC_BASE_URL", raising=False)
-    monkeypatch.delenv("MINI_CLAUDE_MODEL", raising=False)
-    monkeypatch.delenv("MINI_CLAUDE_MAX_TOKENS", raising=False)
+    monkeypatch.delenv("CC_MINI_MODEL", raising=False)
+    monkeypatch.delenv("CC_MINI_MAX_TOKENS", raising=False)
 
     config = load_app_config(_args())
 
@@ -104,7 +104,7 @@ def test_load_app_config_uses_defaults_when_nothing_is_set(monkeypatch: pytest.M
 
 
 def test_load_app_config_rejects_invalid_max_tokens(tmp_path: Path):
-    config_path = tmp_path / "mini-claude.toml"
+    config_path = tmp_path / "cc-mini.toml"
     config_path.write_text('max_tokens = "abc"\n', encoding="utf-8")
 
     with pytest.raises(ValueError, match="Invalid max_tokens"):

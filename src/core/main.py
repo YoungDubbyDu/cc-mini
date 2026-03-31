@@ -30,7 +30,7 @@ from .tools.glob_tool import GlobTool
 from .tools.grep_tool import GrepTool
 
 console = Console()
-_HISTORY_FILE = Path.home() / ".mini_claude_history"
+_HISTORY_FILE = Path.home() / ".cc_mini_history"
 
 # Match claude-code-main: useDoublePress DOUBLE_PRESS_TIMEOUT_MS = 800
 _DOUBLE_PRESS_TIMEOUT_MS = 0.8
@@ -200,7 +200,7 @@ def run_query(engine: Engine, user_input: str | list, print_mode: bool,
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(prog="mini-claude",
+    parser = argparse.ArgumentParser(prog="cc-mini",
                                      description="Minimal Python Claude Code")
     parser.add_argument("prompt", nargs="?", help="Prompt to send (optional)")
     parser.add_argument("-p", "--print", action="store_true",

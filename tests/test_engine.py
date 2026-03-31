@@ -1,8 +1,8 @@
 from unittest.mock import MagicMock, patch
-from mini_claude.engine import Engine
-from mini_claude.config import default_max_tokens_for_model
-from mini_claude.tools.base import Tool, ToolResult
-from mini_claude.permissions import PermissionChecker
+from core.engine import Engine
+from core.config import default_max_tokens_for_model
+from core.tools.base import Tool, ToolResult
+from core.permissions import PermissionChecker
 
 
 class EchoTool(Tool):

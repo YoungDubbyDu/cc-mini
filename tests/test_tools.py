@@ -1,6 +1,6 @@
 import pytest
-from mini_claude.tools.file_read import FileReadTool
-from mini_claude.tools.glob_tool import GlobTool
+from core.tools.file_read import FileReadTool
+from core.tools.glob_tool import GlobTool
 
 
 @pytest.fixture
@@ -61,7 +61,7 @@ def test_glob_is_read_only():
     assert GlobTool().is_read_only() is True
 
 
-from mini_claude.tools.grep_tool import GrepTool
+from core.tools.grep_tool import GrepTool
 
 
 def test_grep_finds_pattern(tmp_path):
@@ -92,7 +92,7 @@ def test_grep_is_read_only():
     assert GrepTool().is_read_only() is True
 
 
-from mini_claude.tools.file_edit import FileEditTool
+from core.tools.file_edit import FileEditTool
 
 
 def test_file_edit_replaces_unique_string(tmp_path):
@@ -142,7 +142,7 @@ def test_file_edit_string_not_found(tmp_path):
     assert "not found" in result.content.lower()
 
 
-from mini_claude.tools.bash import BashTool
+from core.tools.bash import BashTool
 
 
 def test_bash_runs_command():

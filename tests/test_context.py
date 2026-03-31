@@ -1,6 +1,6 @@
 from unittest.mock import patch, MagicMock
 import subprocess
-from mini_claude.context import build_system_prompt, _get_git_status, _find_claude_md
+from core.context import build_system_prompt, _get_git_status, _find_claude_md
 
 
 def test_build_system_prompt_contains_base_instructions():
@@ -23,7 +23,7 @@ def test_build_system_prompt_includes_git_status_when_available():
     fake_result = MagicMock()
     fake_result.stdout = "main"
 
-    with patch("mini_claude.context.subprocess.run", return_value=fake_result):
+    with patch("core.context.subprocess.run", return_value=fake_result):
         prompt = build_system_prompt(cwd="/tmp")
     assert "Git Status" in prompt
     assert "main" in prompt
@@ -57,7 +57,7 @@ def test_get_git_status_returns_branch_and_log(tmp_path):
             result.stdout = ""
         return result
 
-    with patch("mini_claude.context.subprocess.run", side_effect=fake_run):
+    with patch("core.context.subprocess.run", side_effect=fake_run):
         status = _get_git_status(str(tmp_path))
 
     assert "feature-branch" in status
@@ -71,13 +71,13 @@ def test_get_git_status_returns_empty_on_non_git_dir():
         result.stdout = ""
         return result
 
-    with patch("mini_claude.context.subprocess.run", side_effect=fake_run):
+    with patch("core.context.subprocess.run", side_effect=fake_run):
         status = _get_git_status("/tmp/not-a-git-repo")
     assert status == ""
 
 
 def test_get_git_status_returns_empty_on_exception():
-    with patch("mini_claude.context.subprocess.run", side_effect=OSError("fail")):
+    with patch("core.context.subprocess.run", side_effect=OSError("fail")):
         status = _get_git_status("/tmp")
     assert status == ""
 

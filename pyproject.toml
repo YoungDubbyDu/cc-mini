@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mini-claude"
+name = "cc-mini"
 version = "0.1.0"
 requires-python = ">=3.11"
 dependencies = [
@@ -16,7 +16,11 @@ dependencies = [
 dev = ["pytest>=8.0", "pytest-asyncio>=0.23"]
 
 [project.scripts]
-mini-claude = "mini_claude.main:main"
+cc-mini = "core.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/core"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]

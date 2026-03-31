@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock, patch, PropertyMock
-from mini_claude.engine import Engine, AbortedError
-from mini_claude.tools.base import Tool, ToolResult
-from mini_claude.permissions import PermissionChecker
+from core.engine import Engine, AbortedError
+from core.tools.base import Tool, ToolResult
+from core.permissions import PermissionChecker
 
 
 class DummyTool(Tool):
@@ -64,10 +64,10 @@ class _FakeEscListener:
         return False
 
 
-@patch("mini_claude.main.EscListener", _FakeEscListener)
+@patch("core.main.EscListener", _FakeEscListener)
 def test_run_query_prints_text(capsys):
     """run_query should print text events to stdout in print_mode."""
-    from mini_claude.main import run_query
+    from core.main import run_query
 
     engine = _make_engine()
     with patch.object(engine._client.messages, "stream", return_value=_make_text_stream("hello world")):
@@ -77,10 +77,10 @@ def test_run_query_prints_text(capsys):
     assert "hello world" in captured.out
 
 
-@patch("mini_claude.main.EscListener", _FakeEscListener)
+@patch("core.main.EscListener", _FakeEscListener)
 def test_run_query_handles_tool_call_event():
     """run_query should display tool call info via rich console."""
-    from mini_claude.main import run_query
+    from core.main import run_query
 
     engine = _make_engine()
 
@@ -104,10 +104,10 @@ def test_run_query_handles_tool_call_event():
         run_query(engine, "use tool", print_mode=True)
 
 
-@patch("mini_claude.main.EscListener", _FakeEscListener)
+@patch("core.main.EscListener", _FakeEscListener)
 def test_run_query_handles_keyboard_interrupt():
     """run_query should gracefully handle KeyboardInterrupt."""
-    from mini_claude.main import run_query
+    from core.main import run_query
 
     engine = _make_engine()
 

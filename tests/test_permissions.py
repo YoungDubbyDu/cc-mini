@@ -1,9 +1,9 @@
 from unittest.mock import patch
 import os
-from mini_claude.permissions import PermissionChecker
-from mini_claude.tools.file_read import FileReadTool
-from mini_claude.tools.bash import BashTool
-from mini_claude.tools.file_edit import FileEditTool
+from core.permissions import PermissionChecker
+from core.tools.file_read import FileReadTool
+from core.tools.bash import BashTool
+from core.tools.file_edit import FileEditTool
 
 
 def test_read_only_tool_always_allowed():

@@ -35,11 +35,11 @@ _MODEL_MAX_TOKENS = (
     ("claude-3-5-haiku", 8192),
     ("claude-3-haiku", 4096),
 )
-_ENV_MODEL = "MINI_CLAUDE_MODEL"
-_ENV_MAX_TOKENS = "MINI_CLAUDE_MAX_TOKENS"
+_ENV_MODEL = "CC_MINI_MODEL"
+_ENV_MAX_TOKENS = "CC_MINI_MAX_TOKENS"
 _DEFAULT_CONFIG_PATHS = (
-    Path.home() / ".config" / "mini-claude" / "config.toml",
-    Path.cwd() / ".mini-claude.toml",
+    Path.home() / ".config" / "cc-mini" / "config.toml",
+    Path.cwd() / ".cc-mini.toml",
 )
 
 
