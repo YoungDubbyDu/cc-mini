@@ -140,3 +140,32 @@ def test_file_edit_string_not_found(tmp_path):
     result = FileEditTool().execute(file_path=str(f), old_string="xyz", new_string="abc")
     assert result.is_error
     assert "not found" in result.content.lower()
+
+
+from mini_claude.tools.bash import BashTool
+
+
+def test_bash_runs_command():
+    result = BashTool().execute(command="echo hello")
+    assert not result.is_error
+    assert "hello" in result.content
+
+
+def test_bash_captures_stderr():
+    result = BashTool().execute(command="echo err >&2")
+    assert "err" in result.content
+
+
+def test_bash_nonzero_exit_code():
+    result = BashTool().execute(command="exit 1")
+    assert "exit code: 1" in result.content
+
+
+def test_bash_timeout():
+    result = BashTool().execute(command="sleep 10", timeout=1)
+    assert result.is_error
+    assert "timed out" in result.content.lower()
+
+
+def test_bash_is_not_read_only():
+    assert BashTool().is_read_only() is False
