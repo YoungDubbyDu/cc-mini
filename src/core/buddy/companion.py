@@ -137,7 +137,8 @@ def roll(user_id: str) -> Roll:
 
 
 def roll_with_seed(seed: str) -> Roll:
-    return _roll_from(mulberry32(hash_string(seed)))
+    pool = ALL_SPECIES if any(b in seed.lower() for b in BONUS_SPECIES) else SPECIES
+    return _roll_from(mulberry32(hash_string(seed)), species_pool=pool)
 
 
 # ---------------------------------------------------------------------------

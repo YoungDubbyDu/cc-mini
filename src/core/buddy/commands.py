@@ -79,6 +79,7 @@ def _generate_soul(
 
 def _hatch(client: LLMClient, console: Console, model: str) -> None:
     """Hatch a new companion: generate bones, call API for soul, save, animate."""
+    roll.cache_clear()  # ensure fresh roll (seed may have changed)
     user_id = companion_user_id()
     r = roll(user_id)
     bones = r.bones
