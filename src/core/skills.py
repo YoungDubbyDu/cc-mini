@@ -109,6 +109,15 @@ def _parse_frontmatter(text: str) -> tuple[dict[str, Any], str]:
     return meta, body
 
 
+def _ensure_str(val: Any, default: str = "") -> str:
+    """Coerce *val* to a string — rejoin lists produced by the frontmatter parser."""
+    if val is None:
+        return default
+    if isinstance(val, list):
+        return ", ".join(str(v) for v in val)
+    return str(val)
+
+
 def _skill_from_frontmatter(meta: dict[str, Any], body: str,
                              name: str, source: str,
                              skill_root: str | None = None) -> Skill:
@@ -122,15 +131,15 @@ def _skill_from_frontmatter(meta: dict[str, Any], body: str,
         paths = [p.strip() for p in paths.split(",") if p.strip()]
 
     return Skill(
-        name=meta.get("name", name),
-        description=meta.get("description", ""),
-        when_to_use=meta.get("when_to_use", ""),
+        name=_ensure_str(meta.get("name"), name),
+        description=_ensure_str(meta.get("description")),
+        when_to_use=_ensure_str(meta.get("when_to_use")),
         user_invocable=meta.get("user_invocable", True),
         disable_model_invocation=meta.get("disable_model_invocation", False),
         allowed_tools=allowed,
         model=meta.get("model"),
-        context=meta.get("context", "inline"),
-        argument_hint=meta.get("arguments", ""),
+        context=_ensure_str(meta.get("context"), "inline"),
+        argument_hint=_ensure_str(meta.get("arguments")),
         paths=paths,
         source=source,
         skill_root=skill_root,
