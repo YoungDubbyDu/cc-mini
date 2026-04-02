@@ -2,7 +2,7 @@
 
 # cc-mini
 
-**Ultra light Harness scaffolding for a AI Agent**
+**Ultra-light Harness scaffolding for AI agents**
 
 **Agentic** &nbsp;·&nbsp; **Built to Extend** &nbsp;·&nbsp; **From Claude Code**
 <br>
